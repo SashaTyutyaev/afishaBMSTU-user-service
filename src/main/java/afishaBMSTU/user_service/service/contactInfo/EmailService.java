@@ -1,4 +1,4 @@
-package afishaBMSTU.user_service.service.user.managing;
+package afishaBMSTU.user_service.service.contactInfo;
 
 import afishaBMSTU.user_service.exceptions.IncorrectParameterException;
 import afishaBMSTU.user_service.exceptions.NotFoundException;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("emailService")
 @RequiredArgsConstructor
 @Slf4j
-public class EmailService implements UserManagingService {
+public class EmailService implements UserContactInfoService {
 
     private final EmailRepository emailRepository;
     private final UserRepository userRepository;

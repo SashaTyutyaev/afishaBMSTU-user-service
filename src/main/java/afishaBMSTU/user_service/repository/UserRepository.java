@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -17,7 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where u.id in ?1")
     Page<User> findAllByIdsPageable(List<Long> ids, Pageable pageable);
 
-    Boolean existsByNickname(String nickname);
-
-    Optional<User> findByNickname(String nickname);
+    Optional<User> findByExternalId(UUID externalId);
 }

@@ -25,6 +25,7 @@ import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -40,21 +41,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "external_id")
+    private UUID externalId;
+
     @Column(name = "name")
     private String name;
 
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "nickname", unique = true)
-    private String nickname;
-
     @Column(name = "group_name")
     private String groupName;
-
-    @Size(min = 8, max = 500)
-    @JsonIgnore
-    private String password;
 
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

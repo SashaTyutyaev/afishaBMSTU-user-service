@@ -1,4 +1,4 @@
-package afishaBMSTU.user_service.service.user.managing;
+package afishaBMSTU.user_service.service.contactInfo;
 
 import afishaBMSTU.user_service.exceptions.IncorrectParameterException;
 import afishaBMSTU.user_service.exceptions.NotFoundException;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("phoneService")
 @RequiredArgsConstructor
 @Slf4j
-public class PhoneService implements UserManagingService {
+public class PhoneService implements UserContactInfoService {
 
     private final PhoneRepository phoneRepository;
     private final UserRepository userRepository;

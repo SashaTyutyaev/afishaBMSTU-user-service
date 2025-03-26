@@ -1,21 +1,21 @@
-package afishaBMSTU.user_service.service.user.managing;
+package afishaBMSTU.user_service.service.contactInfo;
 
-import afishaBMSTU.user_service.dto.UserUpdateDto;
+import afishaBMSTU.user_service.dto.UserContactInfoUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MainUserManagingService {
+public class MainUserContactInfoService {
 
     @Qualifier("emailService")
-    private final UserManagingService emailService;
+    private final UserContactInfoService emailService;
 
     @Qualifier("phoneService")
-    private final UserManagingService phoneService;
+    private final UserContactInfoService phoneService;
 
-    public void addNewItem(Long userId, UserUpdateDto updateDto) {
+    public void addNewItem(Long userId, UserContactInfoUpdateDto updateDto) {
         String email = updateDto.getEmail();
         String phone = updateDto.getPhone();
 
@@ -37,7 +37,7 @@ public class MainUserManagingService {
         }
     }
 
-    public void updateItem(Long itemId, Long userId, UserUpdateDto updateDto) {
+    public void updateItem(Long itemId, Long userId, UserContactInfoUpdateDto updateDto) {
         String email = updateDto.getEmail();
         String phone = updateDto.getPhone();
 

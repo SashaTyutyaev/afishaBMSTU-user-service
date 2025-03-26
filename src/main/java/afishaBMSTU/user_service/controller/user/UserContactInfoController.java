@@ -1,8 +1,8 @@
-/*
 package afishaBMSTU.user_service.controller.user;
 
-import afishaBMSTU.user_service.dto.UserUpdateDto;
-import afishaBMSTU.user_service.service.user.managing.MainUserManagingService;
+import afishaBMSTU.user_service.dto.UserContactInfoUpdateDto;
+import afishaBMSTU.user_service.model.user.CustomUserDetails;
+import afishaBMSTU.user_service.service.contactInfo.MainUserContactInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users/managing")
+@RequestMapping("/api/users/contact-info")
 @RequiredArgsConstructor
-@Tag(name = "API для управления пользователями")
-public class UserManagingController {
+@Tag(name = "API для управления контактной информацией пользователями")
+public class UserContactInfoController {
 
-    private final MainUserManagingService userManagingService;
+    private final MainUserContactInfoService userManagingService;
 
     @Operation(summary = "Добавление новой почты или телефона", description = "Добавляет новый email или телефон пользователю")
     @ApiResponses(value = {
@@ -36,9 +36,9 @@ public class UserManagingController {
     })
     @PostMapping("/add")
     public void addNewItem(
-            @RequestBody @Valid UserUpdateDto userUpdateDto,
+            @RequestBody @Valid UserContactInfoUpdateDto userContactInfoUpdateDto,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
-        userManagingService.addNewItem(userDetails.getId(), userUpdateDto);
+        userManagingService.addNewItem(userDetails.getId(), userContactInfoUpdateDto);
     }
 
     @Operation(summary = "Обновление почты или телефона", description = "Обновляет email или телефон пользователя")
@@ -50,10 +50,10 @@ public class UserManagingController {
     })
     @PatchMapping("/update/{itemId}")
     public void updateItem(
-            @RequestBody @Valid UserUpdateDto userUpdateDto,
+            @RequestBody @Valid UserContactInfoUpdateDto userContactInfoUpdateDto,
             @PathVariable Long itemId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
-        userManagingService.updateItem(itemId, userDetails.getId(), userUpdateDto);
+        userManagingService.updateItem(itemId, userDetails.getId(), userContactInfoUpdateDto);
     }
 
     @Operation(summary = "Удаление почты или телефона", description = "Удаляет email или телефон пользователя")
@@ -69,4 +69,4 @@ public class UserManagingController {
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         userManagingService.deleteItem(itemId, userDetails.getId(), type);
     }
-}*/
+}
