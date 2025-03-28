@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.UUID;
 
-@FeignClient(name = "auth-service", url = "${integration.rest.auth-service.url}")
+@FeignClient(name = "AFI-BMSTU-auth-service")
 public interface AuthServiceFeignClient {
 
     @DeleteMapping("/api/internal")
