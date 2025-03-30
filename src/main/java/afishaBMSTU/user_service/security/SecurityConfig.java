@@ -30,7 +30,10 @@ public class SecurityConfig extends BaseSecurityConfig {
     }
 
     @Override
-    protected void configureHttpSecurity(HttpSecurity http) {
-        http.addFilterBefore(internalTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    protected void configureHttpSecurity(HttpSecurity http) throws Exception {
+        http.addFilterBefore(internalTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator/**").permitAll()
+                );
     }
 }

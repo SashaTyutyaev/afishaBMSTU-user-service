@@ -27,4 +27,9 @@ public class JwtAuthFilter extends BaseAuthTokenFilter<CustomUserDetails> {
         return customUserDetailsService.loadUser(jwtTokenDataDto.getExternalId(), jwtTokenDataDto.getRoles());
     }
 
+    @Override
+    protected boolean shouldSkipFilterAddons(String requestURI) {
+        return requestURI.contains("/actuator");
+    }
+
 }
