@@ -1,10 +1,14 @@
 package afishaBMSTU.user_service.service;
 
-import afishaBMSTU.user_service.client.AuthServiceFeignClient;
+import afishaBMSTU.user_service.dto.EmailDto;
+import afishaBMSTU.user_service.dto.PhoneDto;
 import afishaBMSTU.user_service.dto.UserCreationRequestDto;
 import afishaBMSTU.user_service.dto.UserFullDto;
 import afishaBMSTU.user_service.dto.UserUpdateDto;
 import afishaBMSTU.user_service.exceptions.NotFoundException;
+import afishaBMSTU.user_service.kafka.KafkaSender;
+import afishaBMSTU.user_service.mapper.EmailMapper;
+import afishaBMSTU.user_service.mapper.PhoneMapper;
 import afishaBMSTU.user_service.mapper.UserMapper;
 import afishaBMSTU.user_service.model.user.User;
 import afishaBMSTU.user_service.repository.UserRepository;
@@ -14,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,14 +28,21 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
+    private final EmailMapper emailMapper;
+    private final PhoneMapper phoneMapper;
     private final UserRepository userRepository;
     private final SecurityContextService securityContextService;
-    private final AuthServiceFeignClient authServiceFeignClient;
+    private final KafkaSender kafkaSender;
 
     @Override
     @Transactional(readOnly = true)
     public UserFullDto getUser(Long id) {
-        return userMapper.toUserFullDto(getUserById(id));
+        User user = getUserById(id);
+        UserFullDto userFullDto = userMapper.toUserFullDto(user);
+
+        setContactInfoToUser(user, userFullDto);
+
+        return userFullDto;
     }
 
     @Override
@@ -59,7 +72,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id, UUID externalId) {
         userRepository.deleteById(id);
         securityContextService.clearContextForUser(id);
-        authServiceFeignClient.deleteUser(externalId);
+        kafkaSender.send(externalId);
         log.info("User deleted: {}", id);
     }
 
@@ -69,6 +82,19 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toUser(userCreationRequestDto);
         userRepository.save(user);
         log.info("Successfully saved user after signUp");
+    }
+
+    private void setContactInfoToUser(User user, UserFullDto userFullDto) {
+        Set<EmailDto> emailDtos = user.getEmails().stream()
+                .map(emailMapper::toEmailDto)
+                .collect(Collectors.toSet());
+
+        Set<PhoneDto> phoneDtos = user.getPhones().stream()
+                .map(phoneMapper::toPhoneDto)
+                .collect(Collectors.toSet());
+
+        userFullDto.setEmails(emailDtos);
+        userFullDto.setPhones(phoneDtos);
     }
 
     private User getUserById(Long id) {

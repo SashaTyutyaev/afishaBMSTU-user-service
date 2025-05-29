@@ -13,6 +13,6 @@ public class UserFullDto {
     private String name;
     private String surname;
     private String groupName;
-    private Set<String> emails;
-    private Set<String> phones;
+    private Set<EmailDto> emails;
+    private Set<PhoneDto> phones;
 }
